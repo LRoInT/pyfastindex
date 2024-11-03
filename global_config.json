@@ -1,0 +1,9 @@
+{
+    "except": [
+        ".data/*"
+    ],
+    "info_folder": "./file",
+    "tag": "./tag.json",
+    "encoding": "utf-8",
+    "data_folder": ".data"
+}

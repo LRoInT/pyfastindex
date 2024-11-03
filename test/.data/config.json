@@ -2,7 +2,7 @@
     "except": [
         ".data/*"
     ],
-    "data": "./file",
+    "info_folder: "./file",
     "tag": "./tags.json",
     "encoding": "utf-8"
 }

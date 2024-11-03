@@ -63,3 +63,8 @@ def check_file(file_path, data, exc):
     elif file_except(file_path, exc):
         return False
     return True
+
+
+def get_abs_path(path, folder_path):
+    # 获取文件绝对路径
+    return path if os.path.isabs(path) else os.path.join(folder_path, path)

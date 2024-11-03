@@ -22,7 +22,9 @@ def tree_printer(t, level=0):
 
 def merge_item_str(lis1, lis2):
     # 合并两个列表
-    setall = list(set(lis1+lis2))
+    output = list(set(lis1+lis2))
+    if "" in output:
+        output.remove("")
     """
     deled_list = [] # 删除的项
     deled_num = 0  # 删除的个数
@@ -34,4 +36,16 @@ def merge_item_str(lis1, lis2):
                 deled_list.append(setall[i-deled_num])
                 del setall[i-deled_num]
                 deled_num += 1"""
-    return setall
+    return output
+
+
+def format_tags(tags):
+    # 格式化标签
+    if t := type(tags) == list:
+        return sorted(tags)
+    elif t == dict:
+        output = {}
+        for i in tags:
+            output[i.replace(" ", "_").lower()] = format_tags(tags[i])
+        return output
+    return tags

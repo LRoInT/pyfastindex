@@ -1,4 +1,7 @@
 # 树节点
+from typing import Iterable
+
+
 class TreeNode:
     def __init__(self, data=None, next=None, output_end=False):
         self.data = data
@@ -6,16 +9,23 @@ class TreeNode:
         self.output_end = output_end
 
     def __str__(self):
-        return f"TreeNodedata={self.data}, next={self.next})"
+        return f"TreeNode(data='{self.data}', next={self.next})"
 
     def __repr__(self):
         return self.__str__()
 
     def __getitem__(self, item):
+        item = item if isinstance(item, Iterable) and not isinstance(
+            item, str) else (item,)
         for i in self.next:
-            if i.data == item:
-                return i
-        raise KeyError(f"No child named {item}")
+            if type(i) == TreeNode:
+                if i.data == item[0]:
+                    if len(item) == 1:
+                        return i
+                    return i[item]
+            else:
+                if i == item[0]:
+                    return i
 
     def __iter__(self):
         # 迭代器函数
@@ -39,7 +49,7 @@ class TreeNode:
             if not self.next:
                 # 不含有子节点时
                 yield [self.data]
-            
+
             for n in self.next:
                 if type(n) == TreeNode:
                     #  含有子节点时
@@ -55,6 +65,11 @@ class TreeNode:
 
     def add_child(self, data=None, next=None):
         self.next.append(TreeNode(data, next))
+
+    def pop(self, item):
+        for i in range(len(self.next)):
+            if self.next[i].data == item:
+                return self.next.pop(i)
 
     def walk_nodes(self):
         # 遍历树节点
@@ -88,40 +103,51 @@ class TreeNode:
                 output.append([self.data, n])
         return output
 
+    def search(self, data):
+        # 搜索节点
+        if data == self.data:
+            return self.data
+        for i in self:
+            if i[-1] == data:
+                return i[1:]
 
-# 字典转树
+
 def dict2tree(data, title=None, exc=None):
+    # 字典转树
     if exc is None:
-        # 排除项
         exc = []
     tree = TreeNode(title if title is not None else ".")
     for i in data:
         di = data[i]
         tree.add_child(i)
         if type(di) == dict:
-            for j in di:
-                if type(di[j]) == dict:
-                    # 为字典时
-                    tree[i].next.append(dict2tree(di[j], j))
-                else:
-                    # 为普通值时
-                    tree[i].next.append(di[j])
+            # 为字典时
+            for j in dict2tree(di, exc=exc).next:
+                tree[i].next.append(j)
         else:
             if di not in exc:
-                tree[i].next.append(di)
+                if isinstance(di, Iterable):
+                    # 判断是否可迭代
+                    tree[i].next.extend(di)
+                else:
+                    tree[i].next.append(di)
     return tree
 
 
 def tree2dict(tree, null_value=None):
+    # 树转字典
     if null_value is None:
         # 填充值
         null_value = 0
-    if not tree.next:
-        return {tree.data: null_value}
-    dic = {tree.data: {}}
+    if len(tree.next) == 0:
+        return null_value
+    output = {}
     for i in tree.next:
         if type(i) == TreeNode:
-            dic[tree.data][i.data] = tree2dict(i, null_value)
+            if len(i.next) == 0:
+                output[i.data] = null_value
+            else:
+                output[i.data] = tree2dict(i)
         else:
-            dic[tree.data][i] = i
-    return dic
+            output[i] = null_value
+    return output
