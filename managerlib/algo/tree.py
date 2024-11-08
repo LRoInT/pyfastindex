@@ -140,7 +140,7 @@ def tree2dict(tree, null_value=None):
         # 填充值
         null_value = 0
     if len(tree.next) == 0:
-        return null_value
+        return {}
     output = {}
     for i in tree.next:
         if type(i) == TreeNode:

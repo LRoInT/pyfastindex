@@ -46,7 +46,7 @@ def set_file_site(file_path):
     append = output.append
     # 获取文件hash, 大小
     file_hash = get_file_sha3(file_path)
-    append(file_hash[0]+file_hash[-1])
+    append(file_hash[:5]+file_hash[-5:])
     append(str(os.path.getsize(file_path)))
     append(hashlib.sha3_256(compress_file(file_path)).hexdigest())
     return output

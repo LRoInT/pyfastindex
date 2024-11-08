@@ -1,8 +1,7 @@
 {
+    "encoding": "utf-8",
     "except": [
         ".data/*"
     ],
-    "info_folder: "./file",
-    "tag": "./tags.json",
-    "encoding": "utf-8"
+    "tags": "./tag.json"
 }
