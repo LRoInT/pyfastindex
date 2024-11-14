@@ -104,9 +104,7 @@ class TreeNode:
         return output
 
     def search(self, data):
-        # 搜索节点
-        if data == self.data:
-            return self.data
+        # 搜索子节点
         for i in self:
             if i[-1] == data:
                 return i[1:]
@@ -126,7 +124,7 @@ def dict2tree(data, title=None, exc=None):
                 tree[i].next.append(j)
         else:
             if di not in exc:
-                if isinstance(di, Iterable):
+                if isinstance(di, Iterable) and not isinstance(di, str):
                     # 判断是否可迭代
                     tree[i].next.extend(di)
                 else:

@@ -13,7 +13,7 @@ def get_file_name(file) -> str:
 def file_except(file, exc) -> bool:
     # 判断文件是否在排除列表中
     for i in exc:
-        if fnmatch(file, i):
+        if fnmatch("./"+file, "*/"+i):
             return True
     return False
 
@@ -41,30 +41,19 @@ def compress_file(file_path):
 
 
 def set_file_site(file_path):
+    """
+    file_site[
+    file_hash
+    file_size
+    file_compress_hash
+    ]
+    """
     # 设置文件信息路径
     output = []
     append = output.append
     # 获取文件hash, 大小
     file_hash = get_file_sha3(file_path)
-    append(file_hash[:5]+file_hash[-5:])
+    append(file_hash)
     append(str(os.path.getsize(file_path)))
     append(hashlib.sha3_256(compress_file(file_path)).hexdigest())
     return output
-
-
-def check_file(file_path, data, exc):
-    # 检查文件
-    if not os.path.exists(file_path):
-        return False
-    elif os.path.getsize(file_path) != int(data[0]):
-        return False
-    elif hashlib.sha3_256(compress_file(file_path)).hexdigest() != data[1]:
-        return False
-    elif file_except(file_path, exc):
-        return False
-    return True
-
-
-def get_abs_path(path, folder_path):
-    # 获取文件绝对路径
-    return path if os.path.isabs(path) else os.path.join(folder_path, path)

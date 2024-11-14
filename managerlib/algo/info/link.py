@@ -1,0 +1,2 @@
+class LinkManager:
+    pass

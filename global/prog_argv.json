@@ -1,0 +1,22 @@
+{
+    "load": {
+        "s": "l",
+        "l": "load",
+        "i": true
+    },
+    "output": {
+        "s": "o",
+        "l": "output",
+        "i": true
+    },
+    "write": {
+        "s": "w",
+        "l": "write",
+        "i": true
+    },
+    "add": {
+        "s": "a",
+        "l": "add",
+        "i": true
+    }
+}

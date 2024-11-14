@@ -3,5 +3,6 @@
     "except": [
         ".data/*"
     ],
+    "info_folder": "./file",
     "tags": "./tag.json"
 }
