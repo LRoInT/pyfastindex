@@ -152,8 +152,6 @@ class Manager:
         if "" in old_data["path"]:
             old_data["path"].remove("")"""
 
-        
-
         # 写入数据文件
         with open(i, 'w', encoding=encoding) as f:
             write_dic = {"size": file_site[1],
@@ -183,6 +181,9 @@ class Manager:
     def get_info(self, file_path):
         # 获取文件信息
         return self._write_info(["", file_path], self.info_folder, self.encoding)
+
+    def command(self, argv):
+        argv = self.argv_parser(argv)
 
 
 def get_default(config, default_config, keys):

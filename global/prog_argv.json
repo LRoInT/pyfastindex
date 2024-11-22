@@ -12,11 +12,17 @@
     "write": {
         "s": "w",
         "l": "write",
-        "i": true
-    },
-    "add": {
-        "s": "a",
-        "l": "add",
-        "i": true
+        "i": true,
+        "sub": {
+            "add": {
+                "s": "a",
+                "l": "add",
+                "i": true
+            },
+            "del": {
+                "s": "d",
+                "i":true
+            }
+        }
     }
 }
