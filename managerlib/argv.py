@@ -12,6 +12,9 @@ class ArgvParser:
                 v_k[dic[r]["l"]] = r
         return v_k
 
+    def __call__(self, argv):
+        return self.parse(argv)
+
     def _get_argv(self, argv_str):
         if argv_str.startswith("-") and len(argv_str) >= 2:  # 短参数
             argv_str = argv_str[1:]
@@ -23,7 +26,7 @@ class ArgvParser:
         else:
             return False
 
-    def _parse(self, argv, rules, sub=False):
+    def parse(self, argv, rules, sub=False) -> dict:
         v_k = self._creat_v_k(rules)
         # 解析命令行参数
         output = {"nokey": []}
@@ -49,7 +52,7 @@ class ArgvParser:
                         return output, argv
                     break"""
                 if v := self._get_argv(argv[0]):
-                    if not v  in v_k:
+                    if not v in v_k:
                         if sub:
                             return output, argv, True
                         # 出现不该存在的参数时
@@ -64,9 +67,10 @@ class ArgvParser:
             if rules[k]["i"]:
                 # 当参数需要输入时
                 while True:
-                    output[k], argv, exit = self._parse(  # 获取参数输入
+                    output[k], argv, exit = self.parse(  # 获取参数输入
                         argv[1:], rules[k].get("sub", {}), sub=True)
                     if exit:
+                        # 判断是否要停止识别当前参数输入
                         break
             else:
                 # 当参数不需要值时
@@ -78,12 +82,3 @@ class ArgvParser:
             if "l" in rules[k]:
                 v_k.pop(rules[k]["l"])"""
         return output, argv, True if sub else False
-
-    def parse(self, argv):
-        # 解析命令行参数
-        output = {}  # 解析结果
-        parse_argv, argv, exit = self._parse(argv, self.rules)
-        if exit:
-            raise ValueError("Unknown option: " + argv[0])
-        output.update(parse_argv)
-        return output

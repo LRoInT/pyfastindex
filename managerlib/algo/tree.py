@@ -45,11 +45,9 @@ class TreeNode:
                 else:
                     yield [self.data, n]
         else:
-
             if not self.next:
                 # 不含有子节点时
                 yield [self.data]
-
             for n in self.next:
                 if type(n) == TreeNode:
                     #  含有子节点时
@@ -71,7 +69,7 @@ class TreeNode:
             if self.next[i].data == item:
                 return self.next.pop(i)
 
-    def walk_nodes(self):
+    def walk_nodes(self) -> list:
         # 遍历树节点
         if not self.next:
             return [self.data]
@@ -103,14 +101,14 @@ class TreeNode:
                 output.append([self.data, n])
         return output
 
-    def search(self, data):
+    def search(self, data) -> list:
         # 搜索子节点
         for i in self:
             if i[-1] == data:
                 return i[1:]
 
 
-def dict2tree(data, title=None, exc=None):
+def dict2tree(data, title=None, exc=None) -> TreeNode:
     # 字典转树
     if exc is None:
         exc = []
@@ -132,11 +130,8 @@ def dict2tree(data, title=None, exc=None):
     return tree
 
 
-def tree2dict(tree, null_value=None):
+def tree2dict(tree, null_value=None) -> dict:
     # 树转字典
-    if null_value is None:
-        # 填充值
-        null_value = 0
     if len(tree.next) == 0:
         return {}
     output = {}

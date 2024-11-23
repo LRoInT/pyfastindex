@@ -8,14 +8,15 @@ from .argv import ArgvParser
 # 数据管理器
 class Manager:
 
-    def __init__(self, file_path, global_config):
-        self.file_path = file_path  # 文件夹路径源文件夹路径
-        self._load_config(global_config)
+    def __init__(self, global_config):
+        # self.file_path = file_path  # 文件夹路径源文件夹路径
+        """self._load_config(global_config)
         self.tag_manager = algo.info.tag.TagManager(self.tags)
-        self._format_data()
+        self._format_data()"""
+        self._load_global_config(global_config)
 
-    def __repr__(self):
-        return f"Manager(file_path='{self.file_path}', tags='{self.tags}')"
+    '''def __repr__(self):
+        return f"Manager(file_path='{self.file_path}', tags='{self.tags}')"'''
 
     def _init_config(self):
         # 当配置文件不存在时
@@ -47,11 +48,18 @@ class Manager:
                   indent=4, ensure_ascii=False, sort_keys=True)
         return tag
 
-    def _load_config(self, global_config):
+    def _load_global_config(self, global_config):
         self.global_config = json.load(  # 全局配置
             open(os.path.join(global_config, "config.json"), "r", encoding="utf-8"))
         self.argv_parser = ArgvParser(json.load(  # 命令行参数
             open(os.path.join(global_config, "prog_argv.json"), "r", encoding="utf-8")))
+
+    def _load_config(self, file_path):
+        """self.global_config = json.load(  # 全局配置
+            open(os.path.join(global_config, "config.json"), "r", encoding="utf-8"))
+        self.argv_parser = ArgvParser(json.load(  # 命令行参数
+            open(os.path.join(global_config, "prog_argv.json"), "r", encoding="utf-8")))"""
+        self.file_path = file_path  # 文件夹路径源文件夹路径
         self.data_folder = os.path.join(  # 数据文件夹路径
             self.file_path, self.global_config["data_folder"])
         # 局部配置
@@ -78,6 +86,8 @@ class Manager:
         else:
             self.tags = algo.info.tag.format_tags(json.load(
                 open(tag_path, "r", encoding=self.encoding)))
+        self.tag_manager = algo.info.tag.TagManager(self.tags)  # 标签管理器
+        self._format_data()  # 格式化数据
 
     def _format_data(self):
         # 格式化数据
@@ -174,7 +184,7 @@ class Manager:
                     self._write_info([file_path, f],
                                      self.info_folder, self.encoding, input_data)
         else:
-            # 写入单个文件行星
+            # 写入单个文件信息
             self._write_info(["", file_path],
                              self.info_folder, self.encoding, input_data)
 
@@ -182,8 +192,9 @@ class Manager:
         # 获取文件信息
         return self._write_info(["", file_path], self.info_folder, self.encoding)
 
-    def command(self, argv):
+    def input_command(self, argv):
         argv = self.argv_parser(argv)
+        print(argv)
 
 
 def get_default(config, default_config, keys):

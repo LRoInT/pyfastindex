@@ -18,7 +18,7 @@ def file_except(file, exc) -> bool:
     return False
 
 
-def list_files(path):
+def list_files(path) -> list:
     # 读取文件架中所有文件
     files = []
     for file in os.listdir(path):
