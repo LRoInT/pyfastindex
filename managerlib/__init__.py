@@ -1,7 +1,8 @@
 import os
 import json
-from . import algo
 from . import file
+from . import algo
+from algo import info
 from .argv import ArgvParser
 
 
@@ -86,14 +87,14 @@ class Manager:
         else:
             self.tags = algo.info.tag.format_tags(json.load(
                 open(tag_path, "r", encoding=self.encoding)))
-        self.tag_manager = algo.info.tag.TagManager(self.tags)  # 标签管理器
+        self.info_parser = algo.info.InfoParser(self.tags, None)  # 信息管理器
         self._format_data()  # 格式化数据
 
     def _format_data(self):
         # 格式化数据
         json.dump(self.config, open(os.path.join(self.data_folder, "config.json",),  # 配置文件
                   "w", encoding="utf-8"), indent=4, ensure_ascii=False, sort_keys=True)
-        json.dump(self.tag_manager.get_tag_dict(), open(os.path.join(  # 标签文件
+        json.dump(self.info_parser.get_tag_dict(), open(os.path.join(  # 标签文件
             self.data_folder, self.config["tags"]), "w", encoding=self.encoding), indent=4, ensure_ascii=False, sort_keys=True)
 
     def _creat_info_text(self, write_list) -> str:
@@ -117,7 +118,7 @@ class Manager:
         """
         file_site = file.set_file_site(  # 获取文件数据信息
             fp := os.path.join(*file_path))
-        file_tag = self.tag_manager.match(fp)  # 获取文件标签
+        file_tag = self.info_parser.parse(fp)  # 获取文件标签
 
         # 创建文件夹
         p = os.path.join(info_folder_path, file_site[0][0]+file_site[0][-1])

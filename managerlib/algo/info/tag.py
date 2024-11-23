@@ -3,7 +3,7 @@ from copy import copy
 from .. import tree
 
 
-class TagManager:
+class TagParser:
     def __init__(self, tag):
         tag = self.sort_tag(tag)
         self.tags = tree.dict2tree(  # 标签
@@ -57,7 +57,7 @@ class TagManager:
         for t in self.trait:
             self.trait_matcher[t] = self._compile_mather(self.trait[t])
 
-    def match(self, file) -> list[str]:
+    def parse(self, file) -> list[str]:
         # 匹配文件
         output = []
         for t in self.type_matcher:

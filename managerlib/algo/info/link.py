@@ -1,8 +1,8 @@
 import os
 
 
-class LinkManager:
-    def __init__(self):
+class LinkParser:
+    def __init__(self,link_rules):
         pass
 
     def _isid(self, file) -> list | bool:
